@@ -1,11 +1,17 @@
-## Proyecto-Final-IA
+# Proyecto-Final-IA
 *Marly Ceballes Arias
 *Samuel Concha
 
-# Objetivo
-Aplicar algoritmos genéticos para la obtención del camino mínimo en un laberinto de tamaño X por X.
+## Objetivo
+Este código se trata de un proyecto final de IA que utiliza algoritmos genéticos para obtener el camino mínimo en un laberinto de tamaño X por X. A continuación, se explica el código por secciones:
 
-#Librerias
+### Librerias
+**numpy:** se usa para generar matrices de tamaño NxN  llamadas mt y vis para simular los recorridos y bloqueos que se van a generar en el mapa.
+**random:**  permite generar números aleatorios y se usa para escoger puntos de bloqueos aleatorios. 
+**pygame:** Es una biblioteca de programación de juegos en Python.
+**os:** Es una biblioteca que proporciona funciones para interactuar con el sistema operativo. Las funciones **listdir** y **isfile** se utilizan para obtener una lista de archivos en un directorio y verificar si una ruta dada corresponde a un archivo existente, respectivamente. Estas funciones son útiles para trabajar con archivos y directorios en Python.
+**solucionadorLaberinto:** Es un módulo personalizado que contiene funciones específicas para resolver laberintos.
+**time:** Esta biblioteca proporciona funciones relacionadas con el tiempo.
 ```
 import pygame
 import random
@@ -15,18 +21,24 @@ from os.path import isfile, join
 import solucionadorLaberinto as solved
 import time
 ```
-# Colores
+### Colores
+Se definen constantes para representar colores en formato RGB, como el color negro (BLACK) y el color blanco (WHITE).
+
 ```
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 ```
-# Dimensiones de la ventana
+### Dimensiones de la ventana
+Se definen las dimensiones de la ventana del juego mediante las variables **WINDOW_WIDTH** y **WINDOW_HEIGHT**.
+
 ```
 WINDOW_WIDTH = 800
 WINDOW_HEIGHT = 600
 ```
 
 # Inicialización de Pygame
+Se inicializa la biblioteca Pygame y se crea una ventana de juego con las dimensiones especificadas anteriormente. También se establece el título de la ventana.
+
 ```
 pygame.init()
 menu_window = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
@@ -34,15 +46,22 @@ pygame.display.set_caption("Menú de Juego")
 ```
 
 # Fuente
+Se crea un objeto de fuente utilizando la fuente "Arial" con un tamaño de 32 píxeles. Esta fuente se utilizará más adelante para renderizar texto en la ventana.
+
 ```
 font = pygame.font.SysFont("Arial", 32)
 ```
 
 # Variables de juego
-```
-selected_difficulty = 0  # Dificultad seleccionada (Facil = 0, Medio = 1, Dificil = 2)
-game_started = False  # Indica si el juego ha comenzado
+Se definen varias variables que se utilizarán para el funcionamiento del juego. Estas variables incluyen la dificultad seleccionada, un indicador de si el juego ha comenzado y una clase llamada **Menu** que se utiliza para crear y mostrar el menú del juego.
 
+```
+selected_difficulty = 0  // Dificultad seleccionada (Facil = 0, Medio = 1, Dificil = 2)
+game_started = False  // Indica si el juego ha comenzado
+
+//Clase Menu: Esta clase representa el menú del juego y tiene métodos para dibujar el menú en la ventana.
+El constructor de la clase recibe la ventana del juego y la ruta de la imagen de fondo del menú.
+El método draw_menu dibuja los elementos del menú, como el título, las opciones de dificultad y el botón de inicio.
 class Menu:
     def __init__(self, ventana, pathFondo):
         self.ventana = ventana
@@ -58,8 +77,10 @@ class Menu:
         title_text = font.render("Menú de Juego", True, WHITE)
         title_rect = title_text.get_rect(center=(WINDOW_WIDTH // 2, 100))
         self.ventana.blit(title_text, title_rect)
-        
-        # Opciones de dificultad
+```
+
+        ### Opciones de dificultad
+```
         dificultad_text = font.render("Seleccionar dificultad", True, WHITE)
         dificultad_rect = dificultad_text.get_rect(center=(WINDOW_WIDTH // 2, 150))
         self.ventana.blit(dificultad_text, dificultad_rect)
@@ -88,7 +109,7 @@ def start_game():
 menu = Menu(menu_window, "assets/artwork.png")
 ````
 
-# Ventana de juego
+### Ventana de juego
 ```
 WIDTH , HEIGHT = 800 , 600
 FPS = 60
@@ -236,6 +257,8 @@ class Object(pygame.sprite.Sprite):
     def draw(self , win, offsetx,offsety):
         win.blit(self.image , (self.rect.x - offsetx, self.rect.y - offsety))
 
+//Clase Fruit: Esta clase hereda de la clase Object y representa una fruta en el juego.
+Tiene un método loop que se llama en cada iteración del bucle principal del juego para actualizar la posición y el sprite de la fruta.
 class Fruit(pygame.sprite.Sprite):
     SPRITES=load_fruit("Fruits",32,25)
     ANIMATION_DELAY = 3
@@ -281,23 +304,26 @@ class Block(Object):
         block = get_block(size)
         self.image.blit(block,(0,0))
         self.mask = pygame.mask.from_surface(self.image)
-        
+
+//Genera el laberinto utilizando un autómata celular de Conway.
+Comienza inicializando una matriz de celdas aleatorias y luego aplica reglas específicas para evolucionar el laberinto.
+Al final, convierte las celdas vivas en caminos del laberinto.        
 def generate_maze(width, height):
 ```
 
-    # Inicializa la matriz del laberinto con todas las celdas como paredes
-    ```
+    ### Inicializa la matriz del laberinto con todas las celdas como paredes
+```
     maze = np.zeros((height, width))
-    ```
+ ```
     
-    # Inicializa la matriz de celulas vivas aleatorias
-    ```
-    # cells = np.random.randint(2, size=(height, width))
+    ### Inicializa la matriz de celulas vivas aleatorias
+```
+    // cells = np.random.randint(2, size=(height, width))
     cells = np.random.choice([0, 1], size=(N, N), p=[0.4, 0.6])
-     ```
+```
      
-    # Aplica el autómata celular de Conway para generar el laberinto
-      ```
+    ### Aplica el autómata celular de Conway para generar el laberinto
+```
     for i in range(5):
         // Cuenta el número de vecinos vivos de cada celda
         neighbors = np.zeros((height, width))
@@ -310,18 +336,19 @@ def generate_maze(width, height):
         neighbors[:-1, 1:] += cells[1:, :-1]  # vecinos del suroeste
         neighbors[:-1, :-1] += cells[1:, 1:]  # vecinos del sureste
         
-        # # Aplica las reglas del autómata celular
+        ### Aplica las reglas del autómata celular
+ ```
         cells = np.logical_or(np.logical_and(cells == 1, neighbors < 2),
                               np.logical_and(cells == 1, neighbors > 3))
         cells = np.logical_or(cells, np.logical_and(cells == 0, neighbors == 3))
         
         // Convierte las celdas vivas en caminos del laberinto
         maze[cells == 1] = 1
-   ```
+```
     
-    # Coloca la entrada en uno de los extremos del laberinto
+    ### Coloca la entrada en uno de los extremos del laberinto
     
-    ```
+```
     entry_side = random.choice(["top", "bottom", "left", "right"])
     if entry_side == "top":
         entry = (0, random.randint(0, width-1))
@@ -456,15 +483,7 @@ def handle_move(objects,player, key):
         pass
 ````
 
-# dimensionMaze = {pygame.K_1:10, pygame.K_2:20, pygame.K_3:30}
-# def Seleccionar_dificultad(event,player,fruta,offsetx,offsety,objects):
-#     if event.type== pygame.KEYDOWN:
-#         if event.key in dimensionMaze:
-#             offsetx,offsety,objects=draw_maze(Acvacio,player,fruta,offsetx,offsety)
-#         if pygame.sprite.collide_mask(player,fruta):
-#             fruta.Frutas = "Collected"
-#     return offsetx,offsety,objects
-
+````
 def check(x, y, N):
     return x < 0 or x >= N or y < 0 or y >= N
 global mapa
@@ -503,8 +522,9 @@ while running:
     else:
 ```
      
-        # # Lógica del juego
-      ```
+        ## #Lógica del juego
+
+```
         window = pygame.display.set_mode((WIDTH , HEIGHT))
         clock = pygame.time.Clock()
         background, bg_image = obtener_fondo("Brown.png")
@@ -556,9 +576,9 @@ while running:
             for i in range(50):
                 clock.tick(FPS)
                 fruta.loop(FPS)
-                # player.loop(FPS)
+                // player.loop(FPS)
                 draw(window, background, bg_image, offsetx, offsety, objects, player, fruta)
-            # time.sleep(5)
+            // time.sleep(5)
         else:
             print("IA NO ENCONTRO UNA SOLUCION")
             while run:
@@ -584,7 +604,6 @@ while running:
         game_started = False
         pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
 
-pygame.quit()
+   pygame.quit()
 ```
 
-````
