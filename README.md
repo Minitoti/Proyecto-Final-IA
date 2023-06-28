@@ -58,10 +58,14 @@ Se definen varias variables que se utilizarán para el funcionamiento del juego.
 ```
 selected_difficulty = 0  // Dificultad seleccionada (Facil = 0, Medio = 1, Dificil = 2)
 game_started = False  // Indica si el juego ha comenzado
+```
 
-//Clase Menu: Esta clase representa el menú del juego y tiene métodos para dibujar el menú en la ventana.
+### Clase Menu
+Esta clase representa el menú del juego y tiene métodos para dibujar el menú en la ventana.
 El constructor de la clase recibe la ventana del juego y la ruta de la imagen de fondo del menú.
 El método draw_menu dibuja los elementos del menú, como el título, las opciones de dificultad y el botón de inicio.
+
+```
 class Menu:
     def __init__(self, ventana, pathFondo):
         self.ventana = ventana
@@ -80,6 +84,7 @@ class Menu:
 ```
 
 ### Opciones de dificultad
+En esta sección del código, se definen las opciones de dificultad para el juego. Estas opciones permiten ajustar la dificultad del laberinto, lo cual afectará la cantidad de obstáculos y la complejidad del mismo. 
 
 ```
         dificultad_text = font.render("Seleccionar dificultad", True, WHITE)
@@ -111,7 +116,13 @@ menu = Menu(menu_window, "assets/artwork.png")
 ````
 
 ### Ventana de juego
-
+Se definen algunas constantes relacionadas con la ventana de juego, como el ancho, alto y FPS.
+* Se define la función obtener_fondo() para cargar y generar una lista de posiciones de tiles de fondo.
+* Se define la función get_block() para cargar y generar una imagen de bloque.
+* Se define la función flip() para invertir sprites en dirección horizontal.
+* Se define la función load_fruit() para cargar y generar sprites de frutas.
+* Se define la función load_sprite_sheets() para cargar y generar sprites de personajes.
+  
 ```
 WIDTH , HEIGHT = 800 , 600
 FPS = 60
@@ -374,6 +385,12 @@ def generate_maze(width, height):
 ```
     
 ### Coloca la entrada en uno de los extremos del laberinto
+En esta sección específica del código, se implementa la lógica para colocar la entrada del laberinto en uno de los extremos. Dependiendo de cómo esté estructurado el código completo, esta parte puede variar, pero en general, el proceso implica lo siguiente:
+
+* Se determina el tamaño del laberinto, es decir, el número de filas y columnas.
+* Se elige aleatoriamente uno de los cuatro extremos del laberinto: arriba, abajo, izquierda o derecha.
+En función del extremo seleccionado, se establece la posición de la entrada del laberinto. Por ejemplo, si se selecciona el extremo superior, la entrada se colocará en la primera fila en una columna aleatoria.
+* Dependiendo de cómo esté representado el laberinto en el código, puede haber una estructura de datos que registre la posición de la entrada para su posterior uso.
     
 ```
     entry_side = random.choice(["top", "bottom", "left", "right"])
@@ -549,6 +566,17 @@ while running:
 ```
 
 ### Lógica del juego
+En esta parte del código, se implementa la lógica principal del juego, incluyendo las siguientes posibles funcionalidades:
+
+Movimiento del jugador: Se establecen las reglas para que el jugador pueda moverse dentro del laberinto. Esto implica detectar las entradas del teclado o del ratón para recibir las acciones del jugador, y actualizar la posición del jugador en el laberinto en consecuencia.
+
+* **Colisiones y límites:** Se implementa la lógica para detectar colisiones entre el jugador y las paredes del laberinto. Si el jugador intenta moverse hacia una pared, se le debe impedir avanzar en esa dirección. Además, se controla que el jugador no pueda salir del área del laberinto.
+
+* **Objetivos y ganar el juego:** Se establecen las condiciones para que el jugador alcance el objetivo del juego. Esto podría ser llegar a una ubicación específica en el laberinto, recolectar objetos o resolver un rompecabezas. Cuando se cumple la condición de victoria, se muestra un mensaje de felicitaciones o se realiza alguna acción especial.
+
+* **Interacción con elementos del laberinto:** Si el laberinto incluye elementos interactivos, como interruptores, puertas o ítems, se implementa la lógica para permitir al jugador interactuar con ellos. Esto puede incluir la activación de interruptores para abrir puertas, recoger objetos para obtener habilidades o solucionar rompecabezas específicos dentro del laberinto.
+
+* **Sistema de puntuación:** Si el juego tiene un sistema de puntuación, se implementa la lógica para calcular y mostrar la puntuación del jugador. Esto puede basarse en factores como el tiempo que tarda en completar el laberinto, la cantidad de objetos recolectados o la eficiencia de los movimientos realizados.
 
 ```
         window = pygame.display.set_mode((WIDTH , HEIGHT))
@@ -632,3 +660,4 @@ while running:
    pygame.quit()
 ```
 
+Este código muestra la estructura básica de un juego con Pygame, incluyendo la inicialización de la biblioteca, la creación de la ventana, la definición de objetos y personajes, y la lógica del juego. También incluye la generación de un laberinto utilizando un algoritmo específico.
