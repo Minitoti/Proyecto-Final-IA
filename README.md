@@ -1,6 +1,6 @@
 # Proyecto-Final-IA
-*Marly Ceballes Arias
-*Samuel Concha
+* Marly Ceballes Arias
+* Samuel Concha
 
 ## Objetivo
 Este código se trata de un proyecto final de IA que utiliza algoritmos genéticos para obtener el camino mínimo en un laberinto de tamaño X por X. A continuación, se explica el código por secciones:
