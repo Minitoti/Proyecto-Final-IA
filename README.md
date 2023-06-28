@@ -36,7 +36,7 @@ WINDOW_WIDTH = 800
 WINDOW_HEIGHT = 600
 ```
 
-# Inicialización de Pygame
+### Inicialización de Pygame
 Se inicializa la biblioteca Pygame y se crea una ventana de juego con las dimensiones especificadas anteriormente. También se establece el título de la ventana.
 
 ```
@@ -45,14 +45,14 @@ menu_window = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
 pygame.display.set_caption("Menú de Juego")
 ```
 
-# Fuente
+### Fuente
 Se crea un objeto de fuente utilizando la fuente "Arial" con un tamaño de 32 píxeles. Esta fuente se utilizará más adelante para renderizar texto en la ventana.
 
 ```
 font = pygame.font.SysFont("Arial", 32)
 ```
 
-# Variables de juego
+### Variables de juego
 Se definen varias variables que se utilizarán para el funcionamiento del juego. Estas variables incluyen la dificultad seleccionada, un indicador de si el juego ha comenzado y una clase llamada **Menu** que se utiliza para crear y mostrar el menú del juego.
 
 ```
@@ -73,13 +73,14 @@ class Menu:
 
     def draw_menu(self):
         self.ventana.blit(self.fondo, (0,0))
-        # Título
+        // Título
         title_text = font.render("Menú de Juego", True, WHITE)
         title_rect = title_text.get_rect(center=(WINDOW_WIDTH // 2, 100))
         self.ventana.blit(title_text, title_rect)
 ```
 
-        ### Opciones de dificultad
+### Opciones de dificultad
+
 ```
         dificultad_text = font.render("Seleccionar dificultad", True, WHITE)
         dificultad_rect = dificultad_text.get_rect(center=(WINDOW_WIDTH // 2, 150))
@@ -110,12 +111,13 @@ menu = Menu(menu_window, "assets/artwork.png")
 ````
 
 ### Ventana de juego
+
 ```
 WIDTH , HEIGHT = 800 , 600
 FPS = 60
 PLAYER_VEL = 4
 
-# window = pygame.display.set_mode((WIDTH , HEIGHT))
+// window = pygame.display.set_mode((WIDTH , HEIGHT))
 
 def obtener_fondo(name):
     image = pygame.image.load(join("assets","Background",name)) # Carga la imagen
@@ -182,7 +184,11 @@ def load_sprite_sheets(dir1, dir2, width, height, direction=False):
             all_sprites[image.replace(".png","")] = sprites
 
     return all_sprites
+```
+### Clase Jugador 
+Esta clase hereda de la clase pygame.sprite.Sprite y representa al jugador en el juego. Tiene métodos para mover al jugador en diferentes direcciones y actualizar su sprite en función de su movimiento. También tiene un método draw para dibujar al jugador en la ventana del juego.
 
+```
 class Jugador(pygame.sprite.Sprite):
     
     SPRITES=load_sprite_sheets("MainCharacters","MaskDude",32,32,True)
@@ -244,7 +250,11 @@ class Jugador(pygame.sprite.Sprite):
         
     def draw(self,win, offsetx,offsety):
         win.blit(self.sprite, (self.rect.x - offsetx, self.rect.y - offsety))
+```
+### Clase Object
+Esta clase también hereda de pygame.sprite.Sprite y representa un objeto en el juego. Tiene un método draw para dibujar el objeto en la ventana.
 
+```
 class Object(pygame.sprite.Sprite):
     def __init__(self , x , y , width , height , name=None):
         super().__init__()
@@ -256,9 +266,13 @@ class Object(pygame.sprite.Sprite):
 
     def draw(self , win, offsetx,offsety):
         win.blit(self.image , (self.rect.x - offsetx, self.rect.y - offsety))
+```
 
-//Clase Fruit: Esta clase hereda de la clase Object y representa una fruta en el juego.
+### Clase Fruit
+Esta clase hereda de la clase Object y representa una fruta en el juego.
 Tiene un método loop que se llama en cada iteración del bucle principal del juego para actualizar la posición y el sprite de la fruta.
+
+```
 class Fruit(pygame.sprite.Sprite):
     SPRITES=load_fruit("Fruits",32,25)
     ANIMATION_DELAY = 3
@@ -297,32 +311,43 @@ class Fruit(pygame.sprite.Sprite):
     
     def draw(self,win, offsetx,offsety):
         win.blit(self.sprite, (self.rect.x - offsetx, self.rect.y - offsety))    
-    
+```
+### Clase Block 
+Esta clase hereda de Object y representa un bloque en el juego. Tiene un método draw para dibujar el bloque en la ventana.
+
+```    
 class Block(Object):
     def __init__(self , x , y , size):
         super().__init__(x , y , size , size)
         block = get_block(size)
         self.image.blit(block,(0,0))
         self.mask = pygame.mask.from_surface(self.image)
+```
 
-//Genera el laberinto utilizando un autómata celular de Conway.
+### Genera el laberinto utilizando un autómata celular de Conway.
+
 Comienza inicializando una matriz de celdas aleatorias y luego aplica reglas específicas para evolucionar el laberinto.
-Al final, convierte las celdas vivas en caminos del laberinto.        
+Al final, convierte las celdas vivas en caminos del laberinto.
+
+``` 
 def generate_maze(width, height):
 ```
 
-    ### Inicializa la matriz del laberinto con todas las celdas como paredes
+### Inicializa la matriz del laberinto con todas las celdas como paredes
+
 ```
     maze = np.zeros((height, width))
  ```
     
-    ### Inicializa la matriz de celulas vivas aleatorias
+### Inicializa la matriz de celulas vivas aleatorias
+
 ```
     // cells = np.random.randint(2, size=(height, width))
     cells = np.random.choice([0, 1], size=(N, N), p=[0.4, 0.6])
 ```
      
-    ### Aplica el autómata celular de Conway para generar el laberinto
+### Aplica el autómata celular de Conway para generar el laberinto
+
 ```
     for i in range(5):
         // Cuenta el número de vecinos vivos de cada celda
@@ -335,8 +360,10 @@ def generate_maze(width, height):
         neighbors[1:, :-1] += cells[:-1, 1:]  # vecinos del noreste
         neighbors[:-1, 1:] += cells[1:, :-1]  # vecinos del suroeste
         neighbors[:-1, :-1] += cells[1:, 1:]  # vecinos del sureste
-        
-        ### Aplica las reglas del autómata celular
+```
+    
+### Aplica las reglas del autómata celular
+
  ```
         cells = np.logical_or(np.logical_and(cells == 1, neighbors < 2),
                               np.logical_and(cells == 1, neighbors > 3))
@@ -346,7 +373,7 @@ def generate_maze(width, height):
         maze[cells == 1] = 1
 ```
     
-    ### Coloca la entrada en uno de los extremos del laberinto
+### Coloca la entrada en uno de los extremos del laberinto
     
 ```
     entry_side = random.choice(["top", "bottom", "left", "right"])
@@ -445,7 +472,6 @@ def collide(player, objects, dx,dy):
     player.update()
     return collided_object
 
-
 def handle_move2(objects, player):
     if objects != None:
         player.x_vel = 0
@@ -481,9 +507,9 @@ def handle_move(objects,player, key):
             player.move_down(PLAYER_VEL)
     else:
         pass
-````
+```
 
-````
+```
 def check(x, y, N):
     return x < 0 or x >= N or y < 0 or y >= N
 global mapa
@@ -521,8 +547,8 @@ while running:
         pygame.display.flip()
     else:
 ```
-     
-        ## #Lógica del juego
+
+### Lógica del juego
 
 ```
         window = pygame.display.set_mode((WIDTH , HEIGHT))
@@ -603,7 +629,6 @@ while running:
                     offsety += player.y_vel
         game_started = False
         pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
-
    pygame.quit()
 ```
 
