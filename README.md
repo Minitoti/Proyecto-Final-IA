@@ -6,12 +6,12 @@
 Este código se trata de un proyecto final de IA que utiliza algoritmos genéticos para obtener el camino mínimo en un laberinto de tamaño X por X. A continuación, se explica el código por secciones:
 
 ### Librerias
-**numpy:** se usa para generar matrices de tamaño NxN  llamadas mt y vis para simular los recorridos y bloqueos que se van a generar en el mapa.
-**random:**  permite generar números aleatorios y se usa para escoger puntos de bloqueos aleatorios. 
-**pygame:** Es una biblioteca de programación de juegos en Python.
-**os:** Es una biblioteca que proporciona funciones para interactuar con el sistema operativo. Las funciones **listdir** y **isfile** se utilizan para obtener una lista de archivos en un directorio y verificar si una ruta dada corresponde a un archivo existente, respectivamente. Estas funciones son útiles para trabajar con archivos y directorios en Python.
-**solucionadorLaberinto:** Es un módulo personalizado que contiene funciones específicas para resolver laberintos.
-**time:** Esta biblioteca proporciona funciones relacionadas con el tiempo.
+* **numpy:** se usa para generar matrices de tamaño NxN  llamadas mt y vis para simular los recorridos y bloqueos que se van a generar en el mapa.
+* **random:**  permite generar números aleatorios y se usa para escoger puntos de bloqueos aleatorios. 
+* **pygame:** Es una biblioteca de programación de juegos en Python.
+* **os:** Es una biblioteca que proporciona funciones para interactuar con el sistema operativo. Las funciones **listdir** y **isfile** se utilizan para obtener una lista de archivos en un directorio y verificar si una ruta dada corresponde a un archivo existente, respectivamente. Estas funciones son útiles para trabajar con archivos y directorios en Python.
+* **solucionadorLaberinto:** Es un módulo personalizado que contiene funciones específicas para resolver laberintos.
+* **time:** Esta biblioteca proporciona funciones relacionadas con el tiempo.
 ```
 import pygame
 import random
